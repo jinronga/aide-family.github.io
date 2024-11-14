@@ -14,18 +14,18 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        {/* 写一段描述， 详细一点 */}
+        简单易用，只需要配置数据源，即可快速接入告警系统。
       </>
     ),
   },
   {
-    title: '数据源',
+    title: '友好的数据源支持',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        支持 Prometheus、VictoriaMetrics、Loki、ElasticSearch、InfluxDB、MySQL
+        等数据源，支持自定义告警规则。
       </>
     ),
   },
@@ -34,8 +34,7 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        支持丰富的告警场景，包括主机、容器、服务等，支持多种告警方式，包括邮件、短信、语音、钉钉、微信等。
       </>
     ),
   },

@@ -1,0 +1,508 @@
+---
+sidebar_position: 4
+---
+
+# Kubernetes 部署
+
+:::tip 提示
+本文档仅适用于 Kubernetes 部署，其他部署方式请参考官方文档。
+:::
+
+## 准备工作
+
+### 目录结构
+
+```
+└── moon
+    ├── houyi
+    │   ├── configmap.yaml
+    │   ├── deployment.yaml
+    │   └── service.yaml
+    ├── moon-frontend
+    │   ├── deployment.yaml
+    │   ├── ingress.yaml
+    │   └── service.yaml
+    ├── palace
+    │   ├── configmap.yaml
+    │   ├── deployment.yaml
+    │   ├── ingress.yaml
+    │   └── service.yaml
+    └── rabbit
+        ├── configmap.yaml
+        ├── deployment.yaml
+        └── service.yaml
+```
+
+### 准备配置文件
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+<Tabs>
+<TabItem value="palace" label="Palace">
+<Tabs>
+<TabItem value="configmap.yaml" label="configmap.yaml">
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: palace-config
+  namespace: application
+data:
+  config.yaml: |-
+    env: dev
+    dependHouYi: true
+    dependRabbit: true
+    server:
+      name: "Palace"
+      metadata:
+        description: palace是moon监控系列的监控平台，用于管理告警、监控、配置、日志、数据源等
+        background: 寓意为月宫，表示moon系列的统一管理平台
+    
+    http:
+      addr: 0.0.0.0:8000
+      timeout: 50s
+    
+    grpc:
+      addr: 0.0.0.0:9000
+      timeout: 50s
+    
+    jwt:
+      sign_key: "moon-sign_key"
+      issuer: "moon-palace"
+      expire: 3600s
+    
+      allow_list:
+        - /api.admin.authorization.Authorization/Login
+        - /api.admin.authorization.Authorization/Captcha
+        - /api.admin.authorization.Authorization/CreatePassword
+        - /api.Health/Check
+        - /api.Alert/Hook
+        - /api.admin.authorization.Authorization/VerifyEmail
+        - /api.admin.authorization.Authorization/SetEmailWithLogin
+    
+    cache:
+      driver: "redis"
+      redis:
+        network: "tcp"
+        addr: redis.middleware.svc.cluster.local:6379
+        db: 0
+        password: "lQz8OMgje7UyoD"
+        read_timeout: 0.2s
+        write_timeout: 0.2s
+        dial_timeout: 0.2s
+    
+    database:
+      driver: "mysql"
+      debug: false
+      dsn: "root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/moon?charset=utf8mb4&parseTime=True&loc=Local"
+    
+    bizDatabase:
+      driver: "mysql"
+      debug: false
+      dsn: "root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/"
+    
+    alarmDatabase:
+      driver: "mysql"
+      debug: false
+      dsn: "root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/"
+    
+    log:
+      type: "slog"
+      level: "debug"
+      slog:
+        json: true
+    
+    oauth2:
+      redirect_uri: "https://moon.aide-cloud.cn"
+      github:
+        client_id: ""
+        client_secret: ""
+        callback_uri: "https://moon.aide-cloud.cn/api/auth/github/callback"
+        scopes:
+          - "user"
+          - "email"
+      gitee:
+        client_id: ""
+        client_secret: ""
+        callback_uri: "https://moon.aide-cloud.cn/api/auth/gitee/callback"
+        scopes:
+          - "user_info"
+          - "emails"
+    
+    email_config:
+      host: smtp.163.com
+      port: 25
+      user: 
+      pass: 
+
+    oss:
+      type: "local"
+      limitSize:
+        yml:
+          max: 524228
+        yaml:
+          max: 524228
+      local:
+        path: "./data/moon_oss"
+        url: https://moon.aide-cloud.cn/api
+        downloadPre: "/file/download"
+```
+</TabItem>
+<TabItem value="deployment.yaml" label="deployment.yaml">
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: palace
+  namespace: application
+  labels:
+    app: palace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: palace
+  template:
+    metadata:
+      labels:
+        app: palace
+    spec:
+      containers:
+      - name: palace
+        image: docker.cloudimages.asia/aidemoonio/palace:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8000
+        - name: grpc
+          containerPort: 9000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        volumeMounts:
+        - name: palace-data
+          mountPath: /data/conf/config.yaml
+          subPath: config.yaml
+      volumes:
+      - name: palace-data
+        configMap:
+          name: palace-config
+```
+</TabItem>
+<TabItem value="service.yaml" label="service.yaml">
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: palace
+  namespace: application
+  labels:
+    app: palace
+spec:
+  type: ClusterIP
+  selector:
+    app: palace
+  ports:
+  - name: http
+    port: 8000
+    targetPort: http
+  - name: grpc
+    port: 9000
+    targetPort: grpc
+```
+</TabItem>
+<TabItem value="ingress.yaml" label="ingress.yaml">
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: palace
+  namespace: application
+  labels:
+    app: palace
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  tls:
+  - secretName: moon
+    hosts:
+    - moon.aide-cloud.cn
+  rules:
+  - host: moon.aide-cloud.cn
+    http:
+      paths:
+      - path: /api(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: palace
+            port:
+              number: 8000
+```
+</TabItem>
+</Tabs>
+</TabItem>
+
+<TabItem value="houyi" label="HouYi">
+<Tabs>
+<TabItem value="configmap.yaml" label="configmap.yaml">
+</TabItem>
+<TabItem value="deployment.yaml" label="deployment.yaml">
+</TabItem>
+<TabItem value="service.yaml" label="service.yaml">
+</TabItem>
+</Tabs>
+</TabItem>
+
+<TabItem value="rabbit" label="Rabbit">
+<Tabs>
+<TabItem value="configmap.yaml" label="configmap.yaml">
+</TabItem>
+<TabItem value="deployment.yaml" label="deployment.yaml">
+</TabItem>
+<TabItem value="service.yaml" label="service.yaml">
+</TabItem>
+</Tabs>
+</TabItem>
+
+<TabItem value="moon-frontend" label="Moon Frontend">
+<Tabs>
+<TabItem value="configmap.yaml" label="configmap.yaml">
+</TabItem>
+<TabItem value="deployment.yaml" label="deployment.yaml">
+</TabItem>
+<TabItem value="ingress.yaml" label="ingress.yaml">
+</TabItem>
+</Tabs>
+</TabItem>
+</Tabs>
+
+## 创建命名空间
+
+```shell
+kubectl create namespace application
+```
+
+## 创建证书
+
+> 证书文件请自行生成并替换
+
+```shell
+kubectl create secret tls moon -n application \
+--cert moon.aide-cloud.cn_bundle.crt \
+--key moon.aide-cloud.cn.key
+```
+
+## 部署Palace
+
+```shell
+kubectl apply -f moon/palace/
+```
+
+### 查看Pod
+  
+```shell
+kubectl get pods -n application -l app=palace
+```
+
+输出如下：
+
+```
+NAME                      READY   STATUS    RESTARTS   AGE
+palace-7f994f5fdf-9tvmj   1/1     Running   0          6h26m
+```
+
+### 查看Service
+
+```shell
+kubectl get svc -n application -l app=palace
+```
+
+输出如下：
+
+```
+NAME     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
+palace   ClusterIP   10.96.231.48   <none>        8000/TCP,9000/TCP   4d6h
+```
+
+### 查看Ingress
+
+```shell
+kubectl get ingress -n application -l app=palace
+```
+
+输出如下：
+
+```
+NAME     CLASS   HOSTS                ADDRESS     PORTS     AGE
+palace   nginx   moon.aide-cloud.cn   localhost   80, 443   4d5h
+```
+
+### 访问Palace API
+
+```shell
+curl https://moon.aide-cloud.cn/api/health
+```
+
+输出如下：
+
+```json
+{"healthy":true, "version":"v1.1.28"}
+```
+
+
+## 部署HouYi
+
+```shell
+kubectl apply -f moon/houyi/
+```
+
+### 查看Pod
+  
+```shell
+kubectl get pods -n application -l app=houyi
+```
+
+输出如下：
+
+```
+NAME                     READY   STATUS    RESTARTS   AGE
+houyi-6974c75b46-jf2lj   1/1     Running   0          6h33m
+```
+
+### 查看Service
+
+```shell
+kubectl get svc -n application -l app=houyi
+```
+
+输出如下：
+
+```
+NAME    TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)             AGE
+houyi   ClusterIP   10.96.76.5   <none>        8001/TCP,9001/TCP   4d5h
+```
+
+### 访问HouYi API
+
+> 端口映射 kubectl port-forward service/houyi 8001:8001 -n application
+
+```shell
+curl http://localhost:8001/api/health
+```
+
+输出如下：
+
+```json
+{"healthy":true, "version":"v1.1.28"}
+```
+
+## 部署Rabbit
+
+```shell
+kubectl apply -f moon/rabbit/
+```
+
+### 查看Pod
+  
+```shell
+kubectl get pods -n application -l app=rabbit
+```
+
+输出如下：
+
+```
+NAME                     READY   STATUS    RESTARTS   AGE
+rabbit-fd4f7dc4c-nxcx5   1/1     Running   0          6h40m
+```
+
+### 查看Service
+
+```shell
+kubectl get svc -n application -l app=rabbit
+```
+
+输出如下：
+
+```
+NAME     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
+rabbit   ClusterIP   10.96.103.66   <none>        8002/TCP,9002/TCP   4d5h
+```
+
+### 访问Rabbit API
+
+> 端口映射 kubectl port-forward service/rabbit 8002:8002 -n application
+
+```shell
+curl http://localhost:8002/api/health
+```
+
+输出如下：
+
+```json
+{"healthy":true, "version":"v1.1.28"}
+```
+
+## 部署Moon Frontend
+
+```shell
+kubectl apply -f moon/moon-frontend/
+```
+
+### 查看Pod
+  
+```shell
+kubectl get pods -n application -l app=moon-frontend
+```
+
+输出如下：
+
+```
+NAME                             READY   STATUS    RESTARTS   AGE
+moon-frontend-66b58b56bc-gqmlb   1/1     Running   0          12h
+```
+
+### 查看Service
+
+```shell
+kubectl get svc -n application -l app=moon-frontend
+```
+
+输出如下：
+
+```
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+moon-frontend   ClusterIP   10.96.154.167   <none>        80/TCP    2d22
+```
+
+### 查看Ingress
+
+```shell
+kubectl get ingress -n application -l app=moon-frontend
+```
+
+输出如下：
+
+```
+NAME            CLASS   HOSTS                ADDRESS     PORTS     AGE
+moon-frontend   nginx   moon.aide-cloud.cn   localhost   80, 443   2d22h
+```
+
+### 访问Moon Frontend
+
+https://moon.aide-cloud.cn
+
+
+
