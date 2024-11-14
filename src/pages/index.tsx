@@ -23,7 +23,7 @@ function HomepageHeader() {
           <Link
             className='button button--lg button--primary'
             to='/docs/intro'
-            style={{ background: '#6c34e6' }}
+            style={{ background: '#1677ff' }}
           >
             快速开始
           </Link>
