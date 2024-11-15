@@ -69,6 +69,8 @@ tags: [Moon, Metric, Prometheus, VictoriaMetrics]
 
 ![告警列表](./img/realtime-alarm.png)
 
+![告警详情](./img/realtime-detail.png)
+
 ![feishu通知](./img/feishu-notify.png)
 
 ![email通知](./img/email-notify.png)
