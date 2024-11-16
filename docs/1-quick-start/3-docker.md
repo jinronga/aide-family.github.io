@@ -90,6 +90,8 @@ docker-compose ps
 - 前端服务：http://localhost:5173
 - 后端服务：http://localhost:8000/api
 
+**[创建告警策略并告警](https://aide-family.github.io/blog/new-strategy)**
+
 ## 查看服务日志
 
 ```shell

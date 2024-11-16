@@ -35,9 +35,8 @@ sidebar_position: 4
 
 ### 准备配置文件
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
 
 <Tabs>
 <TabItem value="palace" label="Palace">
@@ -135,7 +134,7 @@ data:
       host: smtp.163.com
       port: 25
       user: 
-      pass: 
+      pass:
 
     oss:
       type: "local"
@@ -148,7 +147,8 @@ data:
         path: "./data/moon_oss"
         url: https://moon.aide-cloud.cn/api
         downloadPre: "/file/download"
-```
+
+````
 </TabItem>
 <TabItem value="deployment.yaml" label="deployment.yaml">
 ```yaml
@@ -198,7 +198,8 @@ spec:
       - name: palace-data
         configMap:
           name: palace-config
-```
+````
+
 </TabItem>
 <TabItem value="service.yaml" label="service.yaml">
 ```yaml
@@ -255,26 +256,20 @@ spec:
 </Tabs>
 </TabItem>
 
-<TabItem value="houyi" label="HouYi">
-<Tabs>
-<TabItem value="configmap.yaml" label="configmap.yaml">
-</TabItem>
-<TabItem value="deployment.yaml" label="deployment.yaml">
-</TabItem>
-<TabItem value="service.yaml" label="service.yaml">
-</TabItem>
-</Tabs>
+<TabItem value='houyi' label='HouYi'>
+  <Tabs>
+    <TabItem value='configmap.yaml' label='configmap.yaml'></TabItem>
+    <TabItem value='deployment.yaml' label='deployment.yaml'></TabItem>
+    <TabItem value='service.yaml' label='service.yaml'></TabItem>
+  </Tabs>
 </TabItem>
 
-<TabItem value="rabbit" label="Rabbit">
-<Tabs>
-<TabItem value="configmap.yaml" label="configmap.yaml">
-</TabItem>
-<TabItem value="deployment.yaml" label="deployment.yaml">
-</TabItem>
-<TabItem value="service.yaml" label="service.yaml">
-</TabItem>
-</Tabs>
+<TabItem value='rabbit' label='Rabbit'>
+  <Tabs>
+    <TabItem value='configmap.yaml' label='configmap.yaml'></TabItem>
+    <TabItem value='deployment.yaml' label='deployment.yaml'></TabItem>
+    <TabItem value='service.yaml' label='service.yaml'></TabItem>
+  </Tabs>
 </TabItem>
 
 <TabItem value="moon-frontend" label="Moon Frontend">
@@ -305,14 +300,14 @@ kubectl create secret tls moon -n application \
 --key moon.aide-cloud.cn.key
 ```
 
-## 部署Palace
+## 部署 Palace
 
 ```shell
 kubectl apply -f moon/palace/
 ```
 
-### 查看Pod
-  
+### 查看 Pod
+
 ```shell
 kubectl get pods -n application -l app=palace
 ```
@@ -324,7 +319,7 @@ NAME                      READY   STATUS    RESTARTS   AGE
 palace-7f994f5fdf-9tvmj   1/1     Running   0          6h26m
 ```
 
-### 查看Service
+### 查看 Service
 
 ```shell
 kubectl get svc -n application -l app=palace
@@ -337,7 +332,7 @@ NAME     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
 palace   ClusterIP   10.96.231.48   <none>        8000/TCP,9000/TCP   4d6h
 ```
 
-### 查看Ingress
+### 查看 Ingress
 
 ```shell
 kubectl get ingress -n application -l app=palace
@@ -350,7 +345,7 @@ NAME     CLASS   HOSTS                ADDRESS     PORTS     AGE
 palace   nginx   moon.aide-cloud.cn   localhost   80, 443   4d5h
 ```
 
-### 访问Palace API
+### 访问 Palace API
 
 ```shell
 curl https://moon.aide-cloud.cn/api/health
@@ -359,18 +354,17 @@ curl https://moon.aide-cloud.cn/api/health
 输出如下：
 
 ```json
-{"healthy":true, "version":"v1.1.28"}
+{ "healthy": true, "version": "v1.1.28" }
 ```
 
-
-## 部署HouYi
+## 部署 HouYi
 
 ```shell
 kubectl apply -f moon/houyi/
 ```
 
-### 查看Pod
-  
+### 查看 Pod
+
 ```shell
 kubectl get pods -n application -l app=houyi
 ```
@@ -382,7 +376,7 @@ NAME                     READY   STATUS    RESTARTS   AGE
 houyi-6974c75b46-jf2lj   1/1     Running   0          6h33m
 ```
 
-### 查看Service
+### 查看 Service
 
 ```shell
 kubectl get svc -n application -l app=houyi
@@ -395,7 +389,7 @@ NAME    TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)             AGE
 houyi   ClusterIP   10.96.76.5   <none>        8001/TCP,9001/TCP   4d5h
 ```
 
-### 访问HouYi API
+### 访问 HouYi API
 
 > 端口映射 kubectl port-forward service/houyi 8001:8001 -n application
 
@@ -406,17 +400,17 @@ curl http://localhost:8001/api/health
 输出如下：
 
 ```json
-{"healthy":true, "version":"v1.1.28"}
+{ "healthy": true, "version": "v1.1.28" }
 ```
 
-## 部署Rabbit
+## 部署 Rabbit
 
 ```shell
 kubectl apply -f moon/rabbit/
 ```
 
-### 查看Pod
-  
+### 查看 Pod
+
 ```shell
 kubectl get pods -n application -l app=rabbit
 ```
@@ -428,7 +422,7 @@ NAME                     READY   STATUS    RESTARTS   AGE
 rabbit-fd4f7dc4c-nxcx5   1/1     Running   0          6h40m
 ```
 
-### 查看Service
+### 查看 Service
 
 ```shell
 kubectl get svc -n application -l app=rabbit
@@ -441,7 +435,7 @@ NAME     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
 rabbit   ClusterIP   10.96.103.66   <none>        8002/TCP,9002/TCP   4d5h
 ```
 
-### 访问Rabbit API
+### 访问 Rabbit API
 
 > 端口映射 kubectl port-forward service/rabbit 8002:8002 -n application
 
@@ -452,17 +446,17 @@ curl http://localhost:8002/api/health
 输出如下：
 
 ```json
-{"healthy":true, "version":"v1.1.28"}
+{ "healthy": true, "version": "v1.1.28" }
 ```
 
-## 部署Moon Frontend
+## 部署 Moon Frontend
 
 ```shell
 kubectl apply -f moon/moon-frontend/
 ```
 
-### 查看Pod
-  
+### 查看 Pod
+
 ```shell
 kubectl get pods -n application -l app=moon-frontend
 ```
@@ -474,7 +468,7 @@ NAME                             READY   STATUS    RESTARTS   AGE
 moon-frontend-66b58b56bc-gqmlb   1/1     Running   0          12h
 ```
 
-### 查看Service
+### 查看 Service
 
 ```shell
 kubectl get svc -n application -l app=moon-frontend
@@ -487,7 +481,7 @@ NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
 moon-frontend   ClusterIP   10.96.154.167   <none>        80/TCP    2d22
 ```
 
-### 查看Ingress
+### 查看 Ingress
 
 ```shell
 kubectl get ingress -n application -l app=moon-frontend
@@ -500,9 +494,8 @@ NAME            CLASS   HOSTS                ADDRESS     PORTS     AGE
 moon-frontend   nginx   moon.aide-cloud.cn   localhost   80, 443   2d22h
 ```
 
-### 访问Moon Frontend
+### 访问 Moon Frontend
 
 https://moon.aide-cloud.cn
 
-
-
+**[创建告警策略并告警](https://aide-family.github.io/blog/new-strategy)**
