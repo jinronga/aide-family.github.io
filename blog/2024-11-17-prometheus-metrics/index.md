@@ -1,6 +1,6 @@
 ---
 title: "Prometheus 指标类型详解"
-date: 2024-11-18
+date: 2024-11-17
 authors: ['wutong']
 description: "深入理解 Prometheus 的四种核心指标类型及其使用场景"
 tags: ["Prometheus", "Metrics", "监控", "可观测性"]

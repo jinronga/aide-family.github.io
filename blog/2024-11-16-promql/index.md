@@ -1,6 +1,6 @@
 ---
 title: "PromQL 实用指南"
-date: 2024-11-18
+date: 2024-11-16
 authors: ['wutong']
 description: "详细介绍 Prometheus 查询语言(PromQL)的常见用法和实战技巧"
 tags: ["Prometheus", "PromQL", "监控", "可观测性"]
