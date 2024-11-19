@@ -4,8 +4,14 @@ sidebar_position: 2
 
 # 准备配置
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+:::tip
+
+配置文件中，`env` 为当前环境，`dependHouYi` 和 `dependRabbit` 为是否依赖后羿和月兔组件，`server.name` 为当前组件名称，`server.httpEndpoint` 和 `server.grpcEndpoint` 为当前组件的 http 和 grpc 地址，`server.network` 为当前组件的网络类型，`server.metadata` 为当前组件的描述和背景，`http` 和 `grpc` 为当前组件的 http 和 grpc 配置，`cache` 为当前组件的缓存配置，`database` 为当前组件的数据库配置，`bizDatabase` 为当前组件的业务数据库配置，`alarmDatabase` 为当前组件的告警数据库配置，`log` 为当前组件的日志配置，`oauth2` 为当前组件的 oauth2 配置，`email_config` 为当前组件的邮件配置，`oss` 为当前组件的 oss 配置
+
+:::
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
 
 <Tabs>
 <TabItem value="palace" label="Palace">
@@ -15,7 +21,7 @@ env: dev
 dependHouYi: true
 dependRabbit: true
 server:
-  name: "Palace"
+  name: 'Palace'
   metadata:
     description: palace是moon监控系列的监控平台，用于管理告警、监控、配置、日志、数据源等
     background: 寓意为月宫，表示moon系列的统一管理平台
@@ -29,8 +35,8 @@ grpc:
   timeout: 50s
 
 jwt:
-  sign_key: "moon-sign_key"
-  issuer: "moon-palace"
+  sign_key: 'moon-sign_key'
+  issuer: 'moon-palace'
   expire: 3600s
 
   allow_list:
@@ -43,53 +49,53 @@ jwt:
     - /api.admin.authorization.Authorization/SetEmailWithLogin
 
 cache:
-  driver: "redis"
+  driver: 'redis'
   redis:
-    network: "tcp"
+    network: 'tcp'
     addr: redis.middleware.svc.cluster.local:6379
     db: 0
-    password: "lQz8OMgje7UyoD"
+    password: 'lQz8OMgje7UyoD'
     read_timeout: 0.2s
     write_timeout: 0.2s
     dial_timeout: 0.2s
 
 database:
-  driver: "mysql"
+  driver: 'mysql'
   debug: false
-  dsn: "root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/moon?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: 'root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/moon?charset=utf8mb4&parseTime=True&loc=Local'
 
 bizDatabase:
-  driver: "mysql"
+  driver: 'mysql'
   debug: false
-  dsn: "root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/"
+  dsn: 'root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/'
 
 alarmDatabase:
-  driver: "mysql"
+  driver: 'mysql'
   debug: false
-  dsn: "root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/"
+  dsn: 'root:FfVodQL2BLo02H@tcp(mysql.middleware.svc.cluster.local:3306)/'
 
 log:
-  type: "slog"
-  level: "debug"
+  type: 'slog'
+  level: 'debug'
   slog:
     json: true
 
 oauth2:
-  redirect_uri: "https://moon.aide-cloud.cn"
+  redirect_uri: 'https://moon.aide-cloud.cn'
   github:
-    client_id: ""
-    client_secret: ""
-    callback_uri: "https://moon.aide-cloud.cn/api/auth/github/callback"
+    client_id: ''
+    client_secret: ''
+    callback_uri: 'https://moon.aide-cloud.cn/api/auth/github/callback'
     scopes:
-      - "user"
-      - "email"
+      - 'user'
+      - 'email'
   gitee:
-    client_id: ""
-    client_secret: ""
-    callback_uri: "https://moon.aide-cloud.cn/api/auth/gitee/callback"
+    client_id: ''
+    client_secret: ''
+    callback_uri: 'https://moon.aide-cloud.cn/api/auth/gitee/callback'
     scopes:
-      - "user_info"
-      - "emails"
+      - 'user_info'
+      - 'emails'
 
 email_config:
   host: smtp.163.com
@@ -98,16 +104,16 @@ email_config:
   pass:
 
 oss:
-  type: "local"
+  type: 'local'
   limitSize:
     yml:
       max: 524228
     yaml:
       max: 524228
   local:
-    path: "./data/moon_oss"
+    path: './data/moon_oss'
     url: https://moon.aide-cloud.cn/api
-    downloadPre: "/file/download"
+    downloadPre: '/file/download'
 ```
 
 </TabItem>
@@ -120,9 +126,9 @@ env: dev
 dependPalace: true
 server:
   name: moon_houyi
-  httpEndpoint: "houyi.application.svc.cluster.local:8001"
-  grpcEndpoint: "houyi.application.svc.cluster.local:9001"
-  network: "rpc"
+  httpEndpoint: 'houyi.application.svc.cluster.local:8001'
+  grpcEndpoint: 'houyi.application.svc.cluster.local:9001'
+  network: 'rpc'
   metadata:
     description: 是moon监控系列的告警组件，可以独立部署，接受prom类型规则，也可以接受alertmanager类型组件的告警推送
     background: 寓意为天神后羿，专门用于监控规则告警事件
@@ -134,12 +140,12 @@ grpc:
   timeout: 50s
 
 cache:
-  driver: "redis"
+  driver: 'redis'
   redis:
-    network: "tcp"
+    network: 'tcp'
     addr: redis.middleware.svc.cluster.local:6379
     db: 0
-    password: "lQz8OMgje7UyoD"
+    password: 'lQz8OMgje7UyoD'
     read_timeout: 0.2s
     write_timeout: 0.2s
     dial_timeout: 0.2s
@@ -147,21 +153,20 @@ cache:
 watch:
   strategy:
     timeout: 10s
-    interval: "@every 10s"
+    interval: '@every 10s'
   alertEvent:
     timeout: 10s
     interval: 10s
 
 palace_server:
-  network: "rpc"
-  nodeVersion: ""
-  endpoint: "palace.application.svc.cluster.local:9000"
+  network: 'rpc'
+  nodeVersion: ''
+  endpoint: 'palace.application.svc.cluster.local:9000'
   timeout: 50s
-  secret: ""
+  secret: ''
 ```
 
 </TabItem>
-
 
 <TabItem value="rabbit" label="Rabbit">
 
@@ -171,10 +176,10 @@ env: dev
 dependPalace: true
 server:
   name: moon_rabbit
-  httpEndpoint: "rabbit.application.svc.cluster.local:8002"
-  grpcEndpoint: "rabbit.application.svc.cluster.local:9002"
-  network: "rpc"
-  secret: ""
+  httpEndpoint: 'rabbit.application.svc.cluster.local:8002'
+  grpcEndpoint: 'rabbit.application.svc.cluster.local:9002'
+  network: 'rpc'
+  secret: ''
   metadata:
     description: 是moon监控系列的消息组件，可以独立部署，接受任意的hook消息，并支持邮件、钉钉、企业微信、飞书等告警
     background: 寓意为月宫中的玉兔，专门用于消息通知
@@ -187,18 +192,18 @@ grpc:
   timeout: 2s
 
 log:
-  type: "slog"
-  level: "debug"
+  type: 'slog'
+  level: 'debug'
   slog:
     json: true
 
 cache:
-  driver: "redis"
+  driver: 'redis'
   redis:
-    network: "tcp"
+    network: 'tcp'
     addr: redis.middleware.svc.cluster.local:6379
     db: 0
-    password: "lQz8OMgje7UyoD"
+    password: 'lQz8OMgje7UyoD'
     read_timeout: 0.2s
     write_timeout: 0.2s
     dial_timeout: 0.2s
@@ -210,11 +215,11 @@ global_email_config:
   pass:
 
 palace_server:
-  network: "rpc"
-  nodeVersion: ""
-  endpoint: "palace.application.svc.cluster.local:9000"
+  network: 'rpc'
+  nodeVersion: ''
+  endpoint: 'palace.application.svc.cluster.local:9000'
   timeout: 50s
-  secret: ""
+  secret: ''
 
 # TODO 调整模板结构， 支持多租户
 templates:
@@ -227,7 +232,7 @@ templates:
     {{- $status := .status -}}
     {{- $labels := .labels -}}
     {{- $annotations := .annotations -}}
-    
+
     {
         "msgtype": "markdown",
         "markdown": {
@@ -367,4 +372,3 @@ templates:
 </TabItem>
 
 </Tabs>
-
