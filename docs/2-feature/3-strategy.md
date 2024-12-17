@@ -26,6 +26,12 @@ sidebar_position: 3
 
 ![指标监控](./img/strategy-type-metric.png) 
 
+* 策略图表
+
+> 策略图表是metric类型策略的功能，可以看到这个metric策略的实时数据，以及告警等级对应的阈值线
+
+![策略图表](./img/strategy-type-metric-chart.png)
+
 
 ### 日志监控 (开发中)
 
