@@ -30,6 +30,10 @@ MetricDatasource interface {
 }
 ```
 
+### 创建
+
+![数据源创建](./img/datasource-metric-create.png)
+
 ### 基本信息
 
 ![数据源基本信息](./img/datasource-metric-basic.png)
@@ -87,6 +91,21 @@ type IMQ interface {
 }
 ```
 
+### 创建
+
+![数据源创建](./img/datasource-event-create.png)
+
+![数据源创建](./img/datasource-event-create-1.png)
+
+![数据源创建](./img/datasource-event-create-2.png)
+
+### 基本信息
+
+![数据源基本信息](./img/datasource-event-basic.png)
+
+### 主题
+
+![数据源主题](./img/datasource-event-topic.png)
 ## 日志（Log）开发中
 
 实现统一的日志查询接口，以支持多种日志存储器。 在平台配置统一的日志策略完成日志类型数据的查询、分析、告警、可视化等。
