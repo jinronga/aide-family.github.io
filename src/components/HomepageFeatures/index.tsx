@@ -24,7 +24,7 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        支持 Prometheus、VictoriaMetrics、Loki、ElasticSearch、InfluxDB、MySQL
+        支持 Prometheus、VictoriaMetrics、Loki、ElasticSearch、InfluxDB、MySQL、MQTT、Kafka
         等数据源，支持自定义告警规则。
       </>
     ),

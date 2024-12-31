@@ -5,9 +5,9 @@ import type * as Preset from '@docusaurus/preset-classic'
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Moon监控使用文档',
+  title: 'Moon使用文档',
   tagline:
-    '一款始于prometheus，不止于prometheus的一站式监控系统， 专为简化云原生监控的运维工作而设计， 旨在帮助企业快速部署云原生监控系统， 降低运维成本， 提升运维效率。',
+    'Moon 是一款适用于多个领域的监控告警平台，支持云原生和物联网（IoT）等多种应用场景。它不仅简化了云原生监控的运维工作，还具备强大的物联网支持能力，能够满足不同领域的监控需求。',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
