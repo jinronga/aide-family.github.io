@@ -7,7 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic'
 const config: Config = {
   title: 'Moon使用文档',
   tagline:
-    'Moon是一款适用于多个领域的监控告警平台，支持云原生、物联网（IoT）和人工智能（AI）等多种应用场景。它不仅简化了云原生监控的运维工作，还具备强大的物联网和 AI 支持能力，能够满足不同行业和领域的多样化监控需求。通过实时数据监控、智能告警和故障响应，Moon 帮助企业提前发现潜在问题，提升系统的稳定性、可用性和智能化水平。',
+    'Moon是一款适用于多个领域的监控告警平台，支持云原生、物联网（IoT）和人工智能（AI）等多种应用场景。它不仅简化了云原生监控的运维工作，还具备强大的物联网和 AI 支持能力，能够满足不同行业和领域的多样化监控需求。通过实时数据监控、智能告警和故障响应，能够满足不同领域的监控需求。',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
